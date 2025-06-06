@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Happy Birthday, Name-Platzhalter!</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #1a0000 0%, #660000 70%, #cc3300 100%);
+  font-family: 'Orbitron', sans-serif;
+  color: #ffdab9;
+  overflow-x: hidden;
+  text-align: center;
+  padding: 2rem 1rem;
+  user-select: none;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-top: 1rem;
+  color: #ff4500; /* kräftiges Orange */
+  text-shadow:
+    0 0 10px #ff4500,
+    0 0 20px #ff6347;
+}
+
+#dragon-icon {
+  width: 150px;
+  margin: 2rem auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+#dragon-icon:hover {
+  transform: scale(1.1) rotate(10deg);
+}
+
+.audio-player {
+  margin: 2rem auto;
+  outline: none;
+}
+
+.confetti-piece {
+  position: fixed;
+  width: 8px;
+  height: 24px; /* länglich */
+  opacity: 0.9;
+  border-radius: 3px;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-30px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Popup für Audio */
+#audio-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: #330000cc;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #ff4500;
+  color: #ffe4b5;
+  transition: transform 0.3s ease;
+  z-index: 9999;
+  user-select: text;
+}
+
+#audio-popup.show {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#close-popup {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #ff6347;
+}
+
+#close-popup:hover {
+  color: #ffa07a;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Happy Birthday, Name-Platzhalter!</h1>
+
+<!-- Dragon Icon, klickbar für Audio -->
+<img id="dragon-icon" src="images/dragonboy-dummy.png" alt="Dragon Boy Symbol" title="Klick mich für die Überraschung!" />
+
+<!-- Audio Popup -->
+<div id="audio-popup">
+  <span id="close-popup">&times;</span>
+  <audio controls autoplay>
+    <source src="audio/happybirthday-dummy.mp3" type="audio/mpeg" />
+    Dein Browser unterstützt kein Audio-Element.
+  </audio>
+</div>
+
+<script>
+// Konfetti Setup
+const colors = ['#FF4500', '#FF8C00', '#FFD700']; // OrangeRed, DarkOrange, Gold
+const confettiCount = 60;
+
+function createConfetti() {
+  for (let i = 0; i < confettiCount; i++) {
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti-piece');
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.left = Math.random() * window.innerWidth + 'px';
+    confetti.style.animationDuration = (Math.random() * 2 + 1.5) + 's'; // schneller Fall (1.5 - 3.5s)
+    confetti.style.animationDelay = (Math.random() * 3) + 's';
+    confetti.style.borderRadius = '3px';
+    confetti.style.width = '8px';
+    confetti.style.height = '24px';
+    confetti.style.opacity = 0.9;
+    document.body.appendChild(confetti);
+
+    // zufällige Rotation während des Falls
+    confetti.style.transform = `rotate(${Math.floor(Math.random() * 360)}deg)`;
+  }
+}
+
+// Start Confetti
+createConfetti();
+
+// Audio Popup Steuerung
+const dragonIcon = document.getElementById('dragon-icon');
+const audioPopup = document.getElementById('audio-popup');
+const closePopup = document.getElementById('close-popup');
+
+audioPopup.style.display = 'none'; // versteckt es initial
+
+dragonIcon.addEventListener('click', () => {
+  if (audioPopup.style.display === 'none') {
+    audioPopup.style.display = 'block';
+    setTimeout(() => {
+      audioPopup.classList.add('show');
+    }, 10);
+  } else {
+    audioPopup.classList.remove('show');
+    setTimeout(() => {
+      audioPopup.style.display = 'none';
+    }, 300);
+  }
+});
+
+closePopup.addEventListener('click', () => {
+  audioPopup.classList.remove('show');
+  setTimeout(() => {
+    audioPopup.style.display = 'none';
+  }, 300);
+});
+</script>
+
+</body>
+</html>
